@@ -41,7 +41,7 @@ router.post("/login", async (req, res) => {
       return;
     }
     if (bcrypt.compareSync(password, matchedUser.passwordHash)) {
-      const payload = { id: matchedUser._id, email: matchedUser.email };
+      const payload = { id: matchedUser._id, email: matchedUser.email, role: "junior" };
       const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, { algorithm: "HS256", expiresIn: "6h" });
       res.status(200).json({ authToken: authToken });
     } else {
@@ -53,7 +53,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-router.post("/verify", isAuthenticated, (req, res) => {
+router.get("/verify", isAuthenticated, (req, res) => {
   res.status(200).json(req.payload);
 });
 
