@@ -29,16 +29,17 @@ const userSchema = new Schema(
     },
     profilePic: String,
     skills: [String],
-    favorites: [
+    favoriteCompanies: [
       {
         type: Schema.Types.ObjectId,
         ref: "Company",
       },
-      // {
-      //   _id: false,
-      //   companies: {
-      //   },
-      // },
+    ],
+    favoriteJobPosts: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "JobPost",
+      },
     ],
   },
   {
