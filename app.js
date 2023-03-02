@@ -22,9 +22,11 @@ const authCompanyRoutes = require("./routes/auth.company.routes");
 app.use("/auth/company", authCompanyRoutes);
 
 // Api routes
-// const apiRoutes = require("./routes/api.routes");
-// app.use("/api", isAuthenticated, apiRoutes);
+const apiUserRoutes = require("./routes/api.user.routes");
+app.use("/api/user", apiUserRoutes);
 
+const apiCompanyRoutes = require("./routes/api.company.routes");
+app.use("/api/company", apiCompanyRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
