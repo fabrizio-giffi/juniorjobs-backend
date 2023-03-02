@@ -28,11 +28,11 @@ router.get('/:id',async (req, res) =>{
 router.put('/edit/:id', async (req, res) =>{
     try{
         const changes = req.body
-        console.log(req.body)
+        // console.log(req.body)
         delete changes.passwordHash
         const currentCompany = await Company.findByIdAndUpdate(req.params.id, changes, {new:true}) 
-        console.log(req.payload)
-        res.json(currentCompany)
+        // console.log(req.payload)
+           res.status(200).json(currentCompany)
     }catch(err){
         console.log(err)
         res.status(404).json({message: err.message})
