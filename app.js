@@ -8,6 +8,7 @@ require("./db");
 // Handles http requests (express is node js framework)
 // https://www.npmjs.com/package/express
 const express = require("express");
+const { isAuthenticated } = require("./middlewares/auth.middlewares");
 
 const app = express();
 
@@ -27,6 +28,9 @@ app.use("/api/user", apiUserRoutes);
 
 const apiCompanyRoutes = require("./routes/api.company.routes");
 app.use("/api/company", apiCompanyRoutes);
+
+const apiJobPostsRoutes = require("./routes/api.jobPosts.routes");
+app.use("/api/posts", apiJobPostsRoutes);
 
 // ❗ To handle errors. Routes that don't exist or errors that you handle in specific routes
 require("./error-handling")(app);
