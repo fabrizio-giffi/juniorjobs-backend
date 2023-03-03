@@ -1,20 +1,28 @@
-const router = require('express').Router();
-const User = require('../models/User.model');
+const router = require("express").Router();
+const User = require("../models/User.model");
 
-router.get('/', async (req, res) => {
-    try {
-      const usersList = await User.find();
-      // console.log(usersList)
-      res.json(usersList);
-    } catch (err) {
-      console.log(err);
-      res.status(404).json({ message: err.message });
-    }
-  });
-
-router.get('/:id', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const currentUser = await User.findById(req.params.id).populate("favoriteCompanies favoriteJobPosts")
+    const usersList = await User.find();
+    // console.log(usersList)
+    res.json(usersList);
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ message: err.message });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.params.id)
+      .populate("favoriteCompanies favoriteJobPosts")
+      .populate({
+        path: "favoriteJobPosts",
+        populate: {
+          path: "company",
+          model: "Company",
+        },
+      });
     // console.log(currentUser)
     res.json(currentUser);
   } catch (err) {
@@ -23,7 +31,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.put('/edit/:id', async (req, res) => {
+router.put("/edit/:id", async (req, res) => {
   try {
     const changes = req.body;
     delete changes.passwordHash;
@@ -38,16 +46,16 @@ router.put('/edit/:id', async (req, res) => {
   }
 });
 
-router.get('/publicprofile/:id', async (req, res) => {
+router.get("/publicprofile/:id", async (req, res) => {
   try {
     const currentUser = await User.findById(req.params.id);
-    const responseUser ={
+    const responseUser = {
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
       location: currentUser.location,
       profilePic: currentUser.profilePic,
-      skills: currentUser.skills
-    }
+      skills: currentUser.skills,
+    };
     res.json(responseUser);
   } catch (err) {
     console.log(err);
