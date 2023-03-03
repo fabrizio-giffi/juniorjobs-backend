@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    const currentUser = await User.findById(req.params.id);
+    const currentUser = await User.findById(req.params.id).populate("favoriteCompanies favoriteJobPosts")
     // console.log(currentUser)
     res.json(currentUser);
   } catch (err) {
