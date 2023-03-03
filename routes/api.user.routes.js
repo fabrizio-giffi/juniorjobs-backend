@@ -63,11 +63,19 @@ router.get("/publicprofile/:id", async (req, res) => {
   }
 });
 
-router.put("/privateprofile/deleteFavJobPost/", async (req, res) => {
+router.put("/privateprofile/deleteFavJobPost", async (req, res) => {
   const { id , postId } = req.body;
   const currentUser = await User.findByIdAndUpdate(id, { $pull: { favoriteJobPosts: { $eq: postId } } }, {new : true} )
   // console.log(currentUser)
   res.status(200).json(currentUser);
 })
+
+router.put("/privateprofile/deleteSkill", async (req, res) => {
+  const { id , skill } = req.body;
+  const currentUser = await User.findByIdAndUpdate(id, { $pull: { skills: { $eq: skill } } }, {new : true} )
+  // console.log(currentUser)
+  res.status(200).json(currentUser);
+})
+
 
 module.exports = router;
