@@ -16,8 +16,7 @@ router.get('/', async (req, res) => {
 
 router.get('/:id',async (req, res) =>{
     try{
-        const currentCompany = await Company.findById(req.params.id) 
-        // console.log(currentCompany)
+        const currentCompany = await Company.findById(req.params.id).populate("jobPosts favorites") 
         res.json(currentCompany)
     } catch(err){
         console.log(err)
@@ -28,16 +27,32 @@ router.get('/:id',async (req, res) =>{
 router.put('/edit/:id', async (req, res) =>{
     try{
         const changes = req.body
-        // console.log(req.body)
         delete changes.passwordHash
         const currentCompany = await Company.findByIdAndUpdate(req.params.id, changes, {new:true}) 
         // console.log(req.payload)
-           res.status(200).json(currentCompany)
+           res.status(200).json({currentCompany, message: 'Succesfully edited the information'})
     }catch(err){
         console.log(err)
         res.status(404).json({message: err.message})
     }
 })
+
+// router.get('/publicprofile/:id', async (req, res) => {
+//   try {
+//     const currentUser = await User.findById(req.params.id);
+//     const responseUser ={
+//       firstName: currentUser.firstName,
+//       lastName: currentUser.lastName,
+//       location: currentUser.location,
+//       profilePic: currentUser.profilePic,
+//       skills: currentUser.skills
+//     }
+//     res.json(responseUser);
+//   } catch (err) {
+//     console.log(err);
+//     res.status(404).json({ message: err.message });
+//   }
+// });
 
 
 
