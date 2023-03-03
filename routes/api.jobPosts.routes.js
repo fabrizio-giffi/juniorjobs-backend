@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const JobPost = require("../models/JobPost.model");
+const Company = require("../models/Company.model");
 const { isAuthenticated } = require("../middlewares/auth.middlewares");
 const { isJobPoster } = require("../middlewares/jobPost.middlewares");
 
@@ -29,6 +30,11 @@ router.post("/", async (req, res) => {
   const newJobBody = { title, description, email, salaryRange, address, company, stack };
   try {
     const newJobPost = await JobPost.create(newJobBody);
+    await Company.findByIdAndUpdate(
+      company,
+      { $push: { jobPosts: newJobPost._id } },
+      { new: true }
+    );
     res.status(201).json({ id: newJobPost._id });
   } catch (err) {
     console.log(err);
