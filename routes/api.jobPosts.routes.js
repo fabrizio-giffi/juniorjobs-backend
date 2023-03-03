@@ -14,10 +14,9 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", isAuthenticated, async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
-    const currentJobPost = await JobPost.findById(req.params.id);
-    // console.log(currentJobPost)
+    const currentJobPost = await JobPost.findById(req.params.id).populate("company")
     res.json(currentJobPost);
   } catch (err) {
     console.log(err);
@@ -34,7 +33,7 @@ router.post("/", async (req, res) => {
       company,
       { $push: { jobPosts: newJobPost._id } },
       { new: true }
-    );
+    )
     res.status(201).json({ id: newJobPost._id });
   } catch (err) {
     console.log(err);
