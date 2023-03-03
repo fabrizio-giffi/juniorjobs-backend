@@ -6,8 +6,8 @@ const { isJobPoster } = require("../middlewares/jobPost.middlewares");
 
 router.get("/", async (req, res) => {
   try {
-    const JobPostList = await JobPost.find();
-    res.json(JobPostList);
+    const JobPostList = await JobPost.find().populate("company");
+    res.status(200).json(JobPostList);
   } catch (err) {
     console.log(err);
     res.status(404).json({ message: err.message });
