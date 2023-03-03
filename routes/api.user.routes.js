@@ -38,4 +38,22 @@ router.put('/edit/:id', async (req, res) => {
   }
 });
 
+router.get('/publicprofile/:id', async (req, res) => {
+  try {
+    const currentUser = await User.findById(req.params.id);
+    const responeUser ={
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      location: currentUser.location,
+      profilePic: currentUser.profilePic,
+      skills: currentUser.skills
+
+    }
+    res.json(responeUser);
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ message: err.message });
+  }
+});
+
 module.exports = router;
