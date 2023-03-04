@@ -1,41 +1,68 @@
 const router = require("express").Router();
-const Company = require("../models/Company.model")
+const Company = require("../models/Company.model");
 const { isAuthenticated } = require("../middlewares/auth.middlewares");
 
+router.get("/", async (req, res) => {
+  try {
+    const companyList = await Company.find();
+    res.json(companyList);
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ message: err.message });
+  }
+});
 
+router.get("/:id", async (req, res) => {
+  try {
+    const currentCompany = await Company.findById(req.params.id)
+      .populate("jobPosts favorites")
+      .populate({
+        path: "jobPosts",
+        populate: {
+          path: "company",
+          model: "Company",
+        },
+        path: "favorites",
+        populate: {
+          path: "user",
+          model: "User",
+        },
+      });
+    res.json(currentCompany);
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ message: err.message });
+  }
+});
 
-router.get('/', async (req, res) => {
-    try {
-      const companyList = await Company.find();
-      res.json(companyList);
-    } catch (err) {
-      console.log(err);
-      res.status(404).json({ message: err.message });
-    }
-  });
-
-router.get('/:id',async (req, res) =>{
-    try{
-        const currentCompany = await Company.findById(req.params.id).populate("jobPosts favorites") 
-        res.json(currentCompany)
-    } catch(err){
-        console.log(err)
-        res.status(404).json({message: err.message})
-    }
-})
-
-router.put('/edit/:id', async (req, res) =>{
-    try{
-        const changes = req.body
-        delete changes.passwordHash
-        const currentCompany = await Company.findByIdAndUpdate(req.params.id, changes, {new:true}) 
-        // console.log(req.payload)
-           res.status(200).json({currentCompany, message: 'Succesfully edited the information'})
-    }catch(err){
-        console.log(err)
-        res.status(404).json({message: err.message})
-    }
-})
+router.put("/edit/:id", async (req, res) => {
+  try {
+    const changes = {
+      $set: {
+        name: req.body.name,
+        email: req.body.email,
+        address: {
+          street: req.body.street,
+          zipCode: req.body.zipCode,
+          city: req.body.city,
+          country: req.body.country,
+        },
+        profilePic: req.body.profilePicture,
+      },
+    };
+    const currentCompany = await Company.findByIdAndUpdate(
+      req.params.id,
+      changes,
+      { new: true }
+    );
+    res
+      .status(200)
+      .json({ currentCompany, message: "Succesfully edited the information" });
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({ message: err.message });
+  }
+});
 
 // router.get('/publicprofile/:id', async (req, res) => {
 //   try {
@@ -53,7 +80,5 @@ router.put('/edit/:id', async (req, res) =>{
 //     res.status(404).json({ message: err.message });
 //   }
 // });
-
-
 
 module.exports = router;
