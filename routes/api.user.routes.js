@@ -1,5 +1,6 @@
 const router = require("express").Router();
 const User = require("../models/User.model");
+const JobPost = require("../models/JobPost.model");
 
 router.get("/", async (req, res) => {
   try {
@@ -77,5 +78,13 @@ router.put("/privateprofile/deleteSkill", async (req, res) => {
   res.status(200).json(currentUser);
 })
 
+
+router.put("/addJobPost", async (req, res) => {
+  const { id , postId } = req.body;
+  const findJobPost = await JobPost.findById(postId);
+  const currentUser = await User.findByIdAndUpdate(id,
+     { $push: { favoriteJobPosts: findJobPost._id} }, {new : true} )
+  res.status(200).json(currentUser);
+})
 
 module.exports = router;
