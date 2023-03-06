@@ -16,11 +16,23 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const currentJobPost = await JobPost.findById(req.params.id).populate("company")
+    const currentJobPost = await JobPost.findById(req.params.id).populate("company");
     res.json(currentJobPost);
   } catch (err) {
     console.log(err);
     res.status(404).json({ message: err.message });
+  }
+});
+
+router.put("/:id", async (req, res) => {
+  const { title, description, email, salaryRange, address, company, stack } = req.body;
+  const editJobBody = { title, description, email, salaryRange, address, company, stack };
+  try {
+    const editJobPost = await JobPost.findByIdAndUpdate(req.params.id, editJobBody, { new: true });
+    res.json(editJobPost);
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({ message: err.message });
   }
 });
 
@@ -29,11 +41,7 @@ router.post("/", async (req, res) => {
   const newJobBody = { title, description, email, salaryRange, address, company, stack };
   try {
     const newJobPost = await JobPost.create(newJobBody);
-    await Company.findByIdAndUpdate(
-      company,
-      { $push: { jobPosts: newJobPost._id } },
-      { new: true }
-    )
+    await Company.findByIdAndUpdate(company, { $push: { jobPosts: newJobPost._id } }, { new: true });
     res.status(201).json({ id: newJobPost._id });
   } catch (err) {
     console.log(err);
