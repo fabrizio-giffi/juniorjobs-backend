@@ -15,7 +15,13 @@ const app = express();
 // ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
 
+// Setting ejs as the view engine to use nodemailer
+app.set('view engine', 'ejs');
+
 // 👇 Start handling routes here
+const indexRoutes = require("./routes/index.routes");
+app.use("/", indexRoutes);
+
 const authUserRoutes = require("./routes/auth.user.routes");
 app.use("/auth/user", authUserRoutes);
 
