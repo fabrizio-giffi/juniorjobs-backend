@@ -4,7 +4,7 @@ const User = require("../models/User.model");
 router.get("/", async (req, res) => {
   try {
     const usersList = await User.find();
-    // console.log(usersList)
+    console.log(usersList)
     res.json(usersList);
   } catch (err) {
     console.log(err);
@@ -47,8 +47,10 @@ router.put("/edit/:id", async (req, res) => {
 });
 
 router.get("/publicprofile/:id", async (req, res) => {
+  console.log("PARAMS",req.params.id)
   try {
     const currentUser = await User.findById(req.params.id);
+    console.log("PARAMS",req.params.id)
     const responseUser = {
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
