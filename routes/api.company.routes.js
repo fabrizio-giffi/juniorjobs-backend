@@ -46,8 +46,7 @@ router.put("/edit/:id", async (req, res) => {
           zipCode: req.body.zipCode,
           city: req.body.city,
           country: req.body.country,
-        },
-        profilePic: req.body.profilePicture,
+        }
       },
     };
     const currentCompany = await Company.findByIdAndUpdate(
@@ -63,6 +62,26 @@ router.put("/edit/:id", async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 });
+
+router.put("/edit/picture/:id", async (req, res) => {
+  console.log("BEFORE", req.body)
+  try {
+    const picture = {
+     $set: {
+      profilePic: req.body.profilePicture
+     } 
+    }
+    const currentCompany = await Company.findByIdAndUpdate(
+      req.params.id,
+      picture,
+      { new: true }
+    );
+    console.log("AFTER", req.body)
+    res.status(200).json({currentCompany})
+  } catch (error) {
+    console.log("There was an error uploading a profile picture", error)
+  }
+})
 
 // router.get('/publicprofile/:id', async (req, res) => {
 //   try {
