@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const Company = require("../models/Company.model");
 const { isAuthenticated } = require("../middlewares/auth.middlewares");
+const User = require("../models/User.model");
 
 router.get("/", async (req, res) => {
   try {
@@ -22,11 +23,11 @@ router.get("/:id", async (req, res) => {
           path: "company",
           model: "Company",
         },
-        path: "favorites",
-        populate: {
-          path: "user",
-          model: "User",
-        },
+        // path: "favorites",
+        // populate: {
+        //   path: "favorites",
+        //   model: "User",
+        // },
       });
     res.json(currentCompany);
   } catch (err) {
@@ -64,7 +65,6 @@ router.put("/edit/:id", async (req, res) => {
 });
 
 router.put("/edit/picture/:id", async (req, res) => {
-  console.log("BEFORE", req.body)
   try {
     const picture = {
      $set: {
@@ -76,28 +76,34 @@ router.put("/edit/picture/:id", async (req, res) => {
       picture,
       { new: true }
     );
-    console.log("AFTER", req.body)
     res.status(200).json(currentCompany)
   } catch (error) {
     console.log("There was an error uploading a profile picture", error)
   }
 })
 
-// router.get('/publicprofile/:id', async (req, res) => {
-//   try {
-//     const currentUser = await User.findById(req.params.id);
-//     const responseUser ={
-//       firstName: currentUser.firstName,
-//       lastName: currentUser.lastName,
-//       location: currentUser.location,
-//       profilePic: currentUser.profilePic,
-//       skills: currentUser.skills
-//     }
-//     res.json(responseUser);
-//   } catch (err) {
-//     console.log(err);
-//     res.status(404).json({ message: err.message });
-//   }
-// });
+router.put("/addFavoriteJunior", async (req, res) => {
+  const { id , juniorId } = req.body;
+  const findJunior = await User.findById(juniorId);
+  const currentCompany = await Company.findByIdAndUpdate(
+    id,
+     { $push: { favorites: findJunior._id} }, {new : true} 
+     )
+  res.status(200).json(currentCompany);
+})
+
+router.put("/delete/favorite", async (req, res) => {
+  const { id , favoriteId } = req.body;
+  const deleteFavorite = await Company.findByIdAndUpdate(id, { $pull: { favorites: { $eq: favoriteId } } }, {new : true} )
+  res.status(200).json(deleteFavorite);
+})
+
+router.put("/delete/jobpost", async (req, res) => {
+  const { id , jobPostId } = req.body;
+  const deleteJobPost = await Company.findByIdAndUpdate(id, { $pull: { jobPosts: { $eq: jobPostId } } }, {new : true} )
+  console.log(deleteJobPost)
+  res.status(200).json(deleteJobPost);
+})
+
 
 module.exports = router;
