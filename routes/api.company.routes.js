@@ -22,11 +22,11 @@ router.get("/:id", async (req, res) => {
           path: "company",
           model: "Company",
         },
-        path: "favorites",
-        populate: {
-          path: "user",
-          model: "User",
-        },
+        // path: "favorites",
+        // populate: {
+        //   path: "user",
+        //   model: "User",
+        // },
       });
     res.json(currentCompany);
   } catch (err) {
