@@ -41,6 +41,7 @@ const userSchema = new Schema(
         ref: "JobPost",
       },
     ],
+    calendly: String
   },
   {
     timestamps: true,
