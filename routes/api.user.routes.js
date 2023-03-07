@@ -89,4 +89,12 @@ router.put("/addJobPost", async (req, res) => {
   res.status(200).json(currentUser);
 })
 
+router.put("/addNewSkill", async (req, res) => {
+  const { id , newSkill } = req.body;
+  const currentUser = await User.findByIdAndUpdate(id,
+     { $push: { skills: newSkill} }, {new : true} )
+  res.status(200).json(currentUser);
+})
+
+
 module.exports = router;
