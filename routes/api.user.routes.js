@@ -81,11 +81,25 @@ router.put("/privateprofile/deleteSkill", async (req, res) => {
 })
 
 
+router.put("/privateprofile/deleteFavCompany", async (req, res) => {
+  const { id , companyId } = req.body;
+  const currentUser = await User.findByIdAndUpdate(id, { $pull: { favoriteCompanies: { $eq: companyId } } }, {new : true} )
+  // console.log(currentUser)
+  res.status(200).json(currentUser);
+})
+
 router.put("/addJobPost", async (req, res) => {
   const { id , postId } = req.body;
   const findJobPost = await JobPost.findById(postId);
   const currentUser = await User.findByIdAndUpdate(id,
      { $push: { favoriteJobPosts: findJobPost._id} }, {new : true} )
+  res.status(200).json(currentUser);
+})
+
+router.put("/addCompany", async (req, res) => {
+  const { id , companyId } = req.body;
+  const currentUser = await User.findByIdAndUpdate(id,
+     { $push: { favoriteCompanies: companyId} }, {new : true} )
   res.status(200).json(currentUser);
 })
 

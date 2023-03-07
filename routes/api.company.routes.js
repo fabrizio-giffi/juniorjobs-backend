@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
         },
         // path: "favorites",
         // populate: {
-        //   path: "favorites",
+        //   path: "user",
         //   model: "User",
         // },
       });
