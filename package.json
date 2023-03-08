@@ -15,7 +15,8 @@
     "express-jwt": "^8.4.1",
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "node-email-validation": "^1.0.4"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"

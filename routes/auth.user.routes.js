@@ -2,7 +2,7 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User.model");
 const jwt = require("jsonwebtoken");
-const { isAuthenticated } = require("../middlewares/auth.middlewares");
+const emailValidator = require("node-email-validation");
 
 router.post("/signup", async (req, res) => {
   const { email, password } = req.body;
@@ -11,6 +11,20 @@ router.post("/signup", async (req, res) => {
     res.status(400).json({ message: "Provide valid email and password" });
     return;
   }
+
+  const isValid = emailValidator.is_email_valid(email);
+  console.log(isValid);
+
+  if (!isValid) {
+    res.status(400).json({ message: "Provide a valid email." });
+    return;
+  }
+
+  if (password.length < 6) {
+    res.status(400).json({ message: "Password must be at least 6 characters long" });
+    return;
+  }
+
   try {
     const matchUser = await User.findOne({ email });
     if (matchUser) {
@@ -57,6 +71,5 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error });
   }
 });
-
 
 module.exports = router;
