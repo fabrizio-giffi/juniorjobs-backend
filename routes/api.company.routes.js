@@ -2,6 +2,7 @@ const router = require("express").Router();
 const Company = require("../models/Company.model");
 const { isAuthenticated } = require("../middlewares/auth.middlewares");
 const User = require("../models/User.model");
+const JobPost = require("../models/JobPost.model");
 
 router.get("/", async (req, res) => {
   try {
@@ -47,7 +48,7 @@ router.put("/edit/:id", async (req, res) => {
           zipCode: req.body.zipCode,
           city: req.body.city,
           country: req.body.country,
-        }
+        },
       },
     };
     const currentCompany = await Company.findByIdAndUpdate(
@@ -67,43 +68,40 @@ router.put("/edit/:id", async (req, res) => {
 router.put("/edit/picture/:id", async (req, res) => {
   try {
     const picture = {
-     $set: {
-      profilePic: req.body.profilePicture
-     } 
-    }
+      $set: {
+        profilePic: req.body.profilePicture,
+      },
+    };
     const currentCompany = await Company.findByIdAndUpdate(
       req.params.id,
       picture,
       { new: true }
     );
-    res.status(200).json(currentCompany)
+    res.status(200).json(currentCompany);
   } catch (error) {
-    console.log("There was an error uploading a profile picture", error)
+    console.log("There was an error uploading a profile picture", error);
   }
-})
+});
 
 router.put("/addFavoriteJunior", async (req, res) => {
-  const { id , juniorId } = req.body;
+  const { id, juniorId } = req.body;
   const findJunior = await User.findById(juniorId);
   const currentCompany = await Company.findByIdAndUpdate(
     id,
-     { $push: { favorites: findJunior._id} }, {new : true} 
-     )
+    { $push: { favorites: findJunior._id } },
+    { new: true }
+  );
   res.status(200).json(currentCompany);
-})
+});
 
 router.put("/delete/favorite", async (req, res) => {
-  const { id , favoriteId } = req.body;
-  const deleteFavorite = await Company.findByIdAndUpdate(id, { $pull: { favorites: { $eq: favoriteId } } }, {new : true} )
+  const { id, favoriteId } = req.body;
+  const deleteFavorite = await Company.findByIdAndUpdate(
+    id,
+    { $pull: { favorites: { $eq: favoriteId } } },
+    { new: true }
+  );
   res.status(200).json(deleteFavorite);
-})
-
-router.put("/delete/jobpost", async (req, res) => {
-  const { id , jobPostId } = req.body;
-  const deleteJobPost = await Company.findByIdAndUpdate(id, { $pull: { jobPosts: { $eq: jobPostId } } }, {new : true} )
-  console.log(deleteJobPost)
-  res.status(200).json(deleteJobPost);
-})
-
+});
 
 module.exports = router;

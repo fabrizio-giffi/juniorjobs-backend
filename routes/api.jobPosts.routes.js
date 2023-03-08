@@ -62,4 +62,11 @@ router.put("/edit/:id", isAuthenticated, isJobPoster, async (req, res) => {
   }
 });
 
+router.delete("/delete/:id", async (req, res) => {
+  const { id } = req.params;
+  const deleteJobPost = await JobPost.findByIdAndDelete(id);
+  console.log("DELETE JOBSPOST", deleteJobPost);
+  res.status(200).json(deleteJobPost);
+});
+
 module.exports = router;
