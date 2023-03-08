@@ -2,13 +2,26 @@ const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const Company = require("../models/Company.model");
 const jwt = require("jsonwebtoken");
-const { isAuthenticated } = require("../middlewares/auth.middlewares");
+const emailValidator = require("node-email-validation");
 
 router.post("/signup", async (req, res) => {
   const { name, email, password } = req.body;
 
   if (name === "" || email === "" || password === "") {
     res.status(400).json({ message: "Provide valid informations." });
+    return;
+  }
+
+  const isValid = emailValidator.is_email_valid(email);
+  console.log(isValid);
+
+  if (!isValid) {
+    res.status(400).json({ message: "Provide a valid email." });
+    return;
+  }
+
+  if (password.length < 6) {
+    res.status(400).json({ message: "Password must be at least 6 characters long" });
     return;
   }
 
@@ -43,7 +56,12 @@ router.post("/login", async (req, res) => {
       return;
     }
     if (bcrypt.compareSync(password, matchedCompany.passwordHash)) {
-      const payload = { id: matchedCompany._id, name: matchedCompany.name, email: matchedCompany.email, role: "company" };
+      const payload = {
+        id: matchedCompany._id,
+        name: matchedCompany.name,
+        email: matchedCompany.email,
+        role: "company",
+      };
       const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, { algorithm: "HS256", expiresIn: "6h" });
       res.status(200).json({ authToken: authToken });
     } else {
