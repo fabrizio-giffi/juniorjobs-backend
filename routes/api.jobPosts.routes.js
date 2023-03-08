@@ -38,7 +38,8 @@ router.put("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   const { title, description, email, salaryRange, address, company, stack } = req.body;
-  const newJobBody = { title, description, email, salaryRange, address, company, stack };
+  const stackList = stack.split(",").map((stack) => stack.trim());
+  const newJobBody = { title, description, email, salaryRange, address, company, stack: stackList };
   try {
     const newJobPost = await JobPost.create(newJobBody);
     await Company.findByIdAndUpdate(company, { $push: { jobPosts: newJobPost._id } }, { new: true });
