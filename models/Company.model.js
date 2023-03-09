@@ -1,6 +1,5 @@
 const { Schema, model } = require("mongoose");
 
-// TODO: Please make sure you edit the User model to whatever makes sense in this case
 const companySchema = new Schema(
   {
     name: {
@@ -20,10 +19,25 @@ const companySchema = new Schema(
       required: [true, "Password is required."],
     },
     address: {
-      street: String,
-      zipCode: String,
-      city: String,
-      country: String,
+      street: {
+        type: String,
+        default: "N/A",
+      },
+
+      zipCode: {
+        type: String,
+        default: "N/A",
+      },
+
+      city: {
+        type: String,
+        default: "N/A",
+      },
+
+      country: {
+        type: String,
+        default: "N/A",
+      },
     },
     profilePic: String,
     favorites: [
