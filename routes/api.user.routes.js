@@ -64,6 +64,7 @@ router.get("/publicprofile/:id", async (req, res) => {
       location: currentUser.location,
       profilePic: currentUser.profilePic,
       skills: currentUser.skills,
+      calendly: (typeof currentUser.calendly !== 'undefined' ? currentUser.calendly: "")
     };
     res.json(responseUser);
   } catch (err) {
