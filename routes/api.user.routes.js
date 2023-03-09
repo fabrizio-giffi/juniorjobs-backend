@@ -5,11 +5,10 @@ const JobPost = require("../models/JobPost.model");
 router.get("/", async (req, res) => {
   try {
     const usersList = await User.find();
-    console.log(usersList);
     res.json(usersList);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -24,11 +23,10 @@ router.get("/:id", async (req, res) => {
           model: "Company",
         },
       });
-    // console.log(currentUser)
     res.json(currentUser);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -46,19 +44,16 @@ router.put("/edit/:id", async (req, res) => {
     const currentUser = await User.findByIdAndUpdate(req.params.id, changes, {
       new: true,
     });
-    // console.log(currentUser)
     res.json(currentUser);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
 router.get("/publicprofile/:id", async (req, res) => {
-  console.log("PARAMS", req.params.id);
   try {
     const currentUser = await User.findById(req.params.id);
-    console.log("PARAMS", req.params.id);
     const responseUser = {
       firstName: currentUser.firstName,
       lastName: currentUser.lastName,
@@ -68,23 +63,21 @@ router.get("/publicprofile/:id", async (req, res) => {
       calendly: (typeof currentUser.calendly !== 'undefined' ? currentUser.calendly: "")
     };
     res.json(responseUser);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
 router.put("/privateprofile/deleteFavJobPost", async (req, res) => {
   const { id, postId } = req.body;
   const currentUser = await User.findByIdAndUpdate(id, { $pull: { favoriteJobPosts: { $eq: postId } } }, { new: true });
-  // console.log(currentUser)
   res.status(200).json(currentUser);
 });
 
 router.put("/privateprofile/deleteSkill", async (req, res) => {
   const { id, skill } = req.body;
   const currentUser = await User.findByIdAndUpdate(id, { $pull: { skills: { $eq: skill } } }, { new: true });
-  // console.log(currentUser)
   res.status(200).json(currentUser);
 });
 
@@ -95,7 +88,6 @@ router.put("/privateprofile/deleteFavCompany", async (req, res) => {
     { $pull: { favoriteCompanies: { $eq: companyId } } },
     { new: true }
   );
-  // console.log(currentUser)
   res.status(200).json(currentUser);
 });
 

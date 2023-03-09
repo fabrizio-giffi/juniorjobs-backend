@@ -13,7 +13,6 @@ router.post("/signup", async (req, res) => {
   }
 
   const isValid = emailValidator.is_email_valid(email);
-  console.log(isValid);
 
   if (!isValid) {
     res.status(400).json({ message: "Provide a valid email." });
@@ -60,7 +59,6 @@ router.post("/login", async (req, res) => {
         email: matchedUser.email,
         role: "junior",
       };
-      // console.log(payload.favoriteJobPosts);
       const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, { algorithm: "HS256", expiresIn: "6h" });
       res.status(200).json({ authToken: authToken });
     } else {

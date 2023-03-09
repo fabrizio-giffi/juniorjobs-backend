@@ -8,9 +8,9 @@ router.get("/", async (req, res) => {
   try {
     const JobPostList = await JobPost.find().populate("company");
     res.status(200).json(JobPostList);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -20,9 +20,9 @@ router.get("/:id", async (req, res) => {
       "company"
     );
     res.json(currentJobPost);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -45,9 +45,9 @@ router.put("/:id", async (req, res) => {
       { new: true }
     );
     res.json(editJobPost);
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -63,9 +63,9 @@ router.post("/", async (req, res) => {
       { new: true }
     );
     res.status(201).json({ id: newJobPost._id });
-  } catch (err) {
-    console.log(err);
-    res.status(400).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
   }
 });
 

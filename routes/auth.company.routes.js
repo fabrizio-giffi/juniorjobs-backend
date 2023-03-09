@@ -13,8 +13,6 @@ router.post("/signup", async (req, res) => {
   }
 
   const isValid = emailValidator.is_email_valid(email);
-  console.log(isValid);
-
   if (!isValid) {
     res.status(400).json({ message: "Provide a valid email." });
     return;

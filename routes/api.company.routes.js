@@ -8,9 +8,9 @@ router.get("/", async (req, res) => {
   try {
     const companyList = await Company.find();
     res.json(companyList);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -24,16 +24,11 @@ router.get("/:id", async (req, res) => {
           path: "company",
           model: "Company",
         },
-        // path: "favorites",
-        // populate: {
-        //   path: "user",
-        //   model: "User",
-        // },
       });
     res.json(currentCompany);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -59,9 +54,9 @@ router.put("/edit/:id", async (req, res) => {
     res
       .status(200)
       .json({ currentCompany, message: "Succesfully edited the information" });
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
