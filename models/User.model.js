@@ -1,16 +1,15 @@
 const { Schema, model } = require("mongoose");
 
-// TODO: Please make sure you edit the User model to whatever makes sense in this case
 const userSchema = new Schema(
   {
     firstName: {
       type: String,
-      // required: true,
+      default: "N/A",
       trim: true,
     },
     lastName: {
       type: String,
-      // required: true,
+      default: "N/A",
       trim: true,
     },
     email: {
@@ -24,8 +23,15 @@ const userSchema = new Schema(
       required: [true, "Password is required."],
     },
     location: {
-      country: String,
-      city: String,
+      country: {
+        type: String,
+        default: "N/A",
+      },
+
+      city: {
+        type: String,
+        default: "N/A",
+      },
     },
     profilePic: String,
     skills: [String],
@@ -41,6 +47,7 @@ const userSchema = new Schema(
         ref: "JobPost",
       },
     ],
+    calendly: String,
   },
   {
     timestamps: true,

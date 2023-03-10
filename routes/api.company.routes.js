@@ -1,14 +1,16 @@
 const router = require("express").Router();
 const Company = require("../models/Company.model");
 const { isAuthenticated } = require("../middlewares/auth.middlewares");
+const User = require("../models/User.model");
+const JobPost = require("../models/JobPost.model");
 
 router.get("/", async (req, res) => {
   try {
     const companyList = await Company.find();
     res.json(companyList);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -22,16 +24,11 @@ router.get("/:id", async (req, res) => {
           path: "company",
           model: "Company",
         },
-        path: "favorites",
-        populate: {
-          path: "user",
-          model: "User",
-        },
       });
     res.json(currentCompany);
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
@@ -47,7 +44,6 @@ router.put("/edit/:id", async (req, res) => {
           city: req.body.city,
           country: req.body.country,
         },
-        profilePic: req.body.profilePicture,
       },
     };
     const currentCompany = await Company.findByIdAndUpdate(
@@ -58,27 +54,49 @@ router.put("/edit/:id", async (req, res) => {
     res
       .status(200)
       .json({ currentCompany, message: "Succesfully edited the information" });
-  } catch (err) {
-    console.log(err);
-    res.status(404).json({ message: err.message });
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
   }
 });
 
-// router.get('/publicprofile/:id', async (req, res) => {
-//   try {
-//     const currentUser = await User.findById(req.params.id);
-//     const responseUser ={
-//       firstName: currentUser.firstName,
-//       lastName: currentUser.lastName,
-//       location: currentUser.location,
-//       profilePic: currentUser.profilePic,
-//       skills: currentUser.skills
-//     }
-//     res.json(responseUser);
-//   } catch (err) {
-//     console.log(err);
-//     res.status(404).json({ message: err.message });
-//   }
-// });
+router.put("/edit/picture/:id", async (req, res) => {
+  try {
+    const picture = {
+      $set: {
+        profilePic: req.body.profilePicture,
+      },
+    };
+    const currentCompany = await Company.findByIdAndUpdate(
+      req.params.id,
+      picture,
+      { new: true }
+    );
+    res.status(200).json(currentCompany);
+  } catch (error) {
+    console.log("There was an error uploading a profile picture", error);
+  }
+});
+
+router.put("/addFavoriteJunior", async (req, res) => {
+  const { id, juniorId } = req.body;
+  const findJunior = await User.findById(juniorId);
+  const currentCompany = await Company.findByIdAndUpdate(
+    id,
+    { $push: { favorites: findJunior._id } },
+    { new: true }
+  );
+  res.status(200).json(currentCompany);
+});
+
+router.put("/delete/favorite", async (req, res) => {
+  const { id, favoriteId } = req.body;
+  const deleteFavorite = await Company.findByIdAndUpdate(
+    id,
+    { $pull: { favorites: { $eq: favoriteId } } },
+    { new: true }
+  );
+  res.status(200).json(deleteFavorite);
+});
 
 module.exports = router;

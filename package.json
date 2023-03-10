@@ -17,6 +17,7 @@
     "jsonwebtoken": "^9.0.0",
     "mongoose": "^7.0.0",
     "morgan": "^1.10.0",
+    "node-email-validation": "^1.0.4",
     "nodemailer": "^6.9.1"
   },
   "devDependencies": {
