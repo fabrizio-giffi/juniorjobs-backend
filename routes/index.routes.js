@@ -1,19 +1,15 @@
+const router = require("express").Router();
+const nodemailer = require("nodemailer");
+const templates = require("../template/template");
 const { isAuthenticated } = require("../middlewares/auth.middlewares");
 
-const router = require("express").Router();
-
 router.get("/", (req, res) => {
-  res.status(200).json({message: "JuniorJobs deployment succesful"});
+  res.status(200).json({ message: "JuniorJobs deployment succesful" });
 });
 
 router.get("/verify", isAuthenticated, (req, res) => {
   res.status(200).json(req.payload);
 });
-
-module.exports = router;
-const router = require("express").Router();
-const nodemailer = require("nodemailer");
-const templates = require("../template/template")
 
 router.post("/send-email", async (req, res, next) => {
   let { email, subject, message } = req.body;
@@ -24,18 +20,18 @@ router.post("/send-email", async (req, res, next) => {
     port: 465,
     secure: true, // true for 465, false for other ports
     auth: {
-      user: "fabrizio.giffi@gmail.com",
-      pass: "gzogzepnsupqajhl",
+      user: "<your gmail password here>",
+      pass: "<your application password here>", // link: https://support.google.com/accounts/answer/185833?hl=en
     },
   });
 
   await transporter
     .sendMail({
-      from: '',
-      to: `${email}`,
-      subject: subject,
-      text: message,
-      html: templates.templateExample(message),
+      from: "", // who is sending the email (if different from email in line 23 - not really sure about this)
+      to: `${email}`, // who receives the email
+      subject: subject, // subject of the email
+      text: message, // text of the email
+      html: templates.templateExample(message), // html template to send with email
     })
     .then((info) => {
       console.log(info);
