@@ -1,5 +1,5 @@
 module.exports = {
-  templateExample: (message) => {
+  templateExample: (message, contactInfo) => {
     return `<!DOCTYPE html>
 <html lang="en">
   <head>
@@ -9,7 +9,7 @@ module.exports = {
     <title>Document</title>
   </head>
   <body>
-    <h1>Test message for Nodemailer</h1>
+    <h1>${contactInfo} just sent you a message!</h1>
     <h2>${message}</h2>
   </body>
 </html>
