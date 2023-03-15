@@ -30,7 +30,7 @@ router.post("/send-email", async (req, res) => {
 
   await transporter
     .sendMail({
-      from: "", // who is sending the email (if different from email in line 23 - not really sure about this)
+      from: "Junior Jobs", // who is sending the email (if different from email in line 23 - not really sure about this)
       to: `${email}`, // who receives the email
       subject: subject, // subject of the email
       text: message, // text of the email
