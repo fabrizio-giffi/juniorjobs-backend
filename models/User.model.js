@@ -34,6 +34,16 @@ const userSchema = new Schema(
       },
     },
     profilePic: String,
+    bio: {
+      type: String,
+      maxLength: 200,
+      default: "Describe yourself",
+    },
+    pronouns: String,
+    field: {
+      type: String,
+      enum: ["Frontend", "Backend", "Full-stack", "UX/UI", "Cyber security", "Data analytics"],
+    },
     skills: [String],
     favoriteCompanies: [
       {

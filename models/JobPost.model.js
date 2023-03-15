@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model } = require("mongoose");
 
 const jobPostSchema = new Schema(
   {
@@ -10,7 +10,7 @@ const jobPostSchema = new Schema(
     description: {
       jobtype: {
         type: String,
-        enum: ['full time', 'part time', 'freelance'],
+        enum: ["full time", "part time", "freelance"],
       },
       heading: String,
       tasks: String,
@@ -32,15 +32,19 @@ const jobPostSchema = new Schema(
     },
     company: {
       type: Schema.Types.ObjectId,
-      ref: 'Company',
+      ref: "Company",
     },
-    stack: [ String ],
+    stack: [String],
+    field: {
+      type: String,
+      enum: ["Frontend", "Backend", "Full-stack", "UX/UI", "Cyber security", "Data analytics"],
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const JobPost = model('JobPost', jobPostSchema);
+const JobPost = model("JobPost", jobPostSchema);
 
 module.exports = JobPost;

@@ -44,6 +44,10 @@ const companySchema = new Schema(
       {
         type: Schema.Types.ObjectId,
         ref: "User",
+        contacted: {
+          type: Boolean,
+          default: false,
+        },
       },
     ],
     jobPosts: [
