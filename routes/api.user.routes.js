@@ -38,7 +38,9 @@ router.put("/edit/:id", async (req, res) => {
       country: req.body.country,
       city: req.body.city,
     },
-    calendly: req.body.calendly
+    calendly: req.body.calendly,
+    bio: req.body.bio,
+    pronouns: req.body.pronouns,
   };
   try {
     const currentUser = await User.findByIdAndUpdate(req.params.id, changes, {
@@ -60,12 +62,26 @@ router.get("/publicprofile/:id", async (req, res) => {
       location: currentUser.location,
       profilePic: currentUser.profilePic,
       skills: currentUser.skills,
-      calendly: (typeof currentUser.calendly !== 'undefined' ? currentUser.calendly: "")
+      calendly: typeof currentUser.calendly !== "undefined" ? currentUser.calendly : "",
     };
     res.json(responseUser);
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: error.message });
+  }
+});
+
+router.put("/edit/picture/:id", async (req, res) => {
+  try {
+    const picture = {
+      $set: {
+        profilePic: req.body.profilePicture,
+      },
+    };
+    const currentUser = await User.findByIdAndUpdate(req.params.id, picture, { new: true });
+    res.status(200).json(currentUser);
+  } catch (error) {
+    console.log("There was an error uploading a profile picture", error);
   }
 });
 
