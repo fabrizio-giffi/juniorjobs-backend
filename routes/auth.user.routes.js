@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
 const User = require("../models/User.model");
+const Company = require('../models/Company.model')
 const jwt = require("jsonwebtoken");
 const emailValidator = require("node-email-validation");
 const nodemailer = require("nodemailer");
@@ -81,7 +82,6 @@ router.post("/login", async (req, res) => {
 const generateResetToken = async (email) => {
   const user = await User.findOne({ email });
   if (!user) {
-    // throw new Error("User not found");
     res.status(500).json({message: "User not found"})
   }
 
@@ -104,7 +104,7 @@ const sendPasswordResetEmail = async (email, resetToken) => {
     },
   });
 
-  const resetUrl = `http://localhost:5173/reset/${resetToken}`;
+  const resetUrl = `http://localhost:5173/reset/user/${resetToken}`;
   const message = {
     from: "",
     to: email,
@@ -171,13 +171,17 @@ router.post("/forgot-password", async (req, res) => {
 
 router.post("/reset-password", async (req, res) => {
   const { token, password } = req.body;
-  console.log(req.body);
 
+  if (password.length < 6) {
+    res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters long" });
+    return;
+  }
+  
   try {
     const userId = token;
-    console.log("ID", userId);
     const user = await verifyResetToken(token);
-    console.log("USER", user);
     await updatePassword(userId, password);
     res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {

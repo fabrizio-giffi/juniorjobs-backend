@@ -56,6 +56,14 @@ const companySchema = new Schema(
         ref: "JobPost",
       },
     ],
+    resetToken: {
+      type: String,
+      default: "",
+    },
+    resetTokenExpiry: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,
