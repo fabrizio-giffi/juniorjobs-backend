@@ -59,18 +59,6 @@ router.post("/", async (req, res) => {
   }
 });
 
-router.put("/edit/:id", isAuthenticated, isJobPoster, async (req, res) => {
-  try {
-    const changes = req.body;
-    delete changes.passwordHash;
-    const currentJobPost = await JobPost.findByIdAndUpdate(req.params.id, changes, { upsert: true, new: true });
-    res.json(currentJobPost);
-  } catch (error) {
-    console.log(error);
-    res.status(404).json({ message: error.message });
-  }
-});
-
 router.delete("/delete/:id", async (req, res) => {
   const { id } = req.params;
   try {
