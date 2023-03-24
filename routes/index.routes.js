@@ -13,8 +13,19 @@ router.get("/verify", isAuthenticated, (req, res) => {
 });
 
 router.post("/send-email", async (req, res) => {
-  const userFromId = await User.findById(req.body.id)
-  const email = userFromId.email
+  let email = "";
+
+  if (req.body.role === "company") {
+    try {
+      const userFromId = await User.findById(req.body.id);
+      email = userFromId.email;
+    } catch (error) {
+      console.log("There's been an error finding the user", error);
+    }
+  } else if (req.body.role === "junior") {
+    email = req.body.contact;
+  }
+
   let { subject, message, contactInfo } = req.body;
 
   // create reusable transporter object using the default SMTP transport

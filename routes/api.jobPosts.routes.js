@@ -16,9 +16,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   try {
-    const currentJobPost = await JobPost.findById(req.params.id).populate(
-      "company"
-    );
+    const currentJobPost = await JobPost.findById(req.params.id).populate("company");
     res.json(currentJobPost);
   } catch (error) {
     console.log(error);
@@ -27,8 +25,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
-  const { title, description, email, salaryRange, address, company, stack } =
-    req.body;
+  const { title, description, email, salaryRange, address, company, stack, field } = req.body;
   const editJobBody = {
     title,
     description,
@@ -37,13 +34,10 @@ router.put("/:id", async (req, res) => {
     address,
     company,
     stack,
+    field,
   };
   try {
-    const editJobPost = await JobPost.findByIdAndUpdate(
-      req.params.id,
-      editJobBody,
-      { new: true }
-    );
+    const editJobPost = await JobPost.findByIdAndUpdate(req.params.id, editJobBody, { new: true });
     res.json(editJobPost);
   } catch (error) {
     console.log(error);
@@ -52,16 +46,12 @@ router.put("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  const { title, description, email, salaryRange, address, company, stack } = req.body;
+  const { title, description, email, salaryRange, address, company, stack, field } = req.body;
   const stackList = stack.split(",").map((stack) => stack.trim());
-  const newJobBody = { title, description, email, salaryRange, address, company, stack: stackList };
+  const newJobBody = { title, description, email, salaryRange, address, company, stack: stackList, field };
   try {
     const newJobPost = await JobPost.create(newJobBody);
-    await Company.findByIdAndUpdate(
-      company,
-      { $push: { jobPosts: newJobPost._id } },
-      { new: true }
-    );
+    await Company.findByIdAndUpdate(company, { $push: { jobPosts: newJobPost._id } }, { new: true });
     res.status(201).json({ id: newJobPost._id });
   } catch (error) {
     console.log(error);
@@ -73,11 +63,7 @@ router.put("/edit/:id", isAuthenticated, isJobPoster, async (req, res) => {
   try {
     const changes = req.body;
     delete changes.passwordHash;
-    const currentJobPost = await JobPost.findByIdAndUpdate(
-      req.params.id,
-      changes,
-      { new: true }
-    );
+    const currentJobPost = await JobPost.findByIdAndUpdate(req.params.id, changes, { upsert: true, new: true });
     res.json(currentJobPost);
   } catch (error) {
     console.log(error);
@@ -92,7 +78,7 @@ router.delete("/delete/:id", async (req, res) => {
     res.status(200).json(deleteJobPost);
   } catch (error) {
     console.log(error);
-    res.status(404).json({message: error})
+    res.status(404).json({ message: error });
   }
 });
 
