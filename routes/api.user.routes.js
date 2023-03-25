@@ -41,6 +41,7 @@ router.put("/edit/:id", async (req, res) => {
     calendly: req.body.calendly,
     bio: req.body.bio,
     pronouns: req.body.pronouns,
+    field: req.body.field,
   };
   try {
     const currentUser = await User.findByIdAndUpdate(req.params.id, changes, {
