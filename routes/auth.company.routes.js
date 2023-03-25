@@ -173,7 +173,7 @@ router.post("/reset-password", async (req, res) => {
       .json({ message: "Password must be at least 6 characters long" });
     return;
   }
-  
+
   try {
     const companyId = token;
     const company = await verifyResetToken(token);
@@ -184,7 +184,5 @@ router.post("/reset-password", async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 });
-
-module.exports = router;
 
 module.exports = router;
