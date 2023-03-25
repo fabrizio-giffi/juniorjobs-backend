@@ -40,6 +40,7 @@ Overall, Junior Jobs is a valuable resource for both job seekers and employers i
 },
 {timestamps: true}
 ```
+- Company model
 
 ```javascript
 {
@@ -65,6 +66,7 @@ Overall, Junior Jobs is a valuable resource for both job seekers and employers i
     timestamps: true,
 }
 ```
+- Jobpost model
 
 ```javascript
  {
