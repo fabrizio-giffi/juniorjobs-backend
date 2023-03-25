@@ -20,6 +20,9 @@ app.set('view engine', 'ejs');
 const indexRoutes = require("./routes/index.routes");
 app.use("/", indexRoutes);
 
+const checkoutRoutes = require("./routes/checkout.routes");
+app.use("/checkout", checkoutRoutes);
+
 const authUserRoutes = require("./routes/auth.user.routes");
 app.use("/auth/user", authUserRoutes);
 
