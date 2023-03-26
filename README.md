@@ -163,11 +163,26 @@ Overall, Junior Jobs is a valuable resource for both job seekers and employers i
 | GET        | `/verify`                                  |                 | 200           |              | verifies user                     |
 | POST       | `/send-email`                              |                 | 200           |              | sends an email                       |
 
+## Libraries 
+
+- BcryptJS
+- Cookie-parser
+- Cors
+- Dotenv
+- EJS
+- Express
+- Express-jwt
+- Jsonwebtoken
+- Mongoose
+- Morgan
+- Node-email-validation
+- Nodemailer
+
 ## Links
 
-- github frontend
+- Github frontend
     - https://github.com/fabrizio-giffi/juniorjobs-frontend
-- github backend 
+- Github backend 
     - https://github.com/fabrizio-giffi/juniorjobs-backend
-- deployed version
+- Deployed version
     - https://juniorjobs-frontend.netlify.app/
