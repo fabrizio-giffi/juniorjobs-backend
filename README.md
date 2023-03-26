@@ -111,17 +111,17 @@ Overall, Junior Jobs is a valuable resource for both job seekers and employers i
 
 |HTTP Method | URL                                        | Request body    | Succes status | Error status | Description                          |
 |------------|--------------------------------------------|-----------------|---------------|--------------|--------------------------------------|
-| GET       | `/api/user/`                                |                 |               | 404          | get all users                        |
-| GET       | `/api/user/:id`                             |                 |               | 404          | get single user                      |
-| GET       | `/api/user/publicprofile/:id`               |                 | 200           |              | get single user profile              |
+| GET       | `/api/user/`                                |                 | 200           | 400          | get all users                        |
+| GET       | `/api/user/:id`                             |                 | 200           | 400          | get single user                      |
+| GET       | `/api/user/publicprofile/:id`               |                 | 200           | 400          | get single user profile              |
 | PUT       | `/api/user/edit/:id`                        | firstname, lastname, country, city, calendly, bio, pronouns   |            | 404          |  edit user information |
-| PUT       | `/api/user/edit/picture/:id`                | profilePicture  | 200           |              | edit picture user                    |
-| PUT       | `/api/user/privateprofile/deleteFavJobPost` | id, postId      | 200           |              | removes a favorite job post          |
-| PUT       | `/api/user/privateprofile/deleteSkill`      | id, skill       | 200           |              | removes a skill                      |
-| PUT       | `/api/user/privateprofile/deleteFavCompany` | id, companyId   | 200           |              | removes a favorite company           |
-| PUT       | `/api/user/addJobPost`                      | id, postId      | 200           |              | favorite a job post                  |
-| PUT       | `/api/user/addCompany`                      | id, companyId   | 200           |              | favorite a company                   |
-| PUT       | `/api/user/addNewSkill`                     | id, newSkill    | 200           |              | add a skill                          |
+| PUT       | `/api/user/edit/picture/:id`                | profilePicture  | 200           | 400          | edit picture user                    |
+| PUT       | `/api/user/privateprofile/deleteFavJobPost` | id, postId      | 200           | 400          | removes a favorite job post          |
+| PUT       | `/api/user/privateprofile/deleteSkill`      | id, skill       | 200           | 400          | removes a skill                      |
+| PUT       | `/api/user/privateprofile/deleteFavCompany` | id, companyId   | 200           | 400          | removes a favorite company           |
+| PUT       | `/api/user/addJobPost`                      | id, postId      | 200           | 400          | favorite a job post                  |
+| PUT       | `/api/user/addCompany`                      | id, companyId   | 200           | 400          | favorite a company                   |
+| PUT       | `/api/user/addNewSkill`                     | id, newSkill    | 200           | 400          | add a skill                          |
 
 
 - Company auth routes
@@ -137,21 +137,21 @@ Overall, Junior Jobs is a valuable resource for both job seekers and employers i
 
 |HTTP Method | URL                                        | Request body    | Succes status | Error status | Description                          |
 |------------|--------------------------------------------|-----------------|---------------|--------------|--------------------------------------|
-| GET       | `/api/company/`                             |                 |               | 404          | get all companies                    |
-| GET       | `/api/company/:id`                          |                 |               | 404          | get one company                      |
+| GET       | `/api/company/`                             |                 | 200           | 404          | get all companies                    |
+| GET       | `/api/company/:id`                          |                 | 200           | 404          | get one company                      |
 | PUT       | `/api/company/edit/:id`                     | name, email, street, zipcode, city, country           | 200           | 500           | edit comapany information |
 | PUT       | `/api/company/edit/picture/:id`             | profilePicture  | 200           | 404          | edit company picture                 |
-| PUT       | `/api/company/addFavoriteJunior`            | id, juniorId    | 200           |              | add favorite junior                  |
-| PUT       | `/api/company/delete/favorite`              | id, favoriteId  | 200           |              | removes favorite junior              |
+| PUT       | `/api/company/addFavoriteJunior`            | id, juniorId    | 200           | 404          | add favorite junior                  |
+| PUT       | `/api/company/delete/favorite`              | id, favoriteId  | 200           | 404          | removes favorite junior              |
 
 - JobPost routes
 
 |HTTP Method | URL                                        | Request body    | Succes status | Error status | Description                          |
 |------------|--------------------------------------------|-----------------|---------------|--------------|--------------------------------------|
 | GET       | ` /api/posts/`                              |                 | 200           | 404          | get all job posts                    |
-| GET       | ` /api/posts/:id`                           |                 |               | 404          | get one job post                      |
+| GET       | ` /api/posts/:id`                           |                 | 200           | 404          | get one job post                      |
 | PUT       | ` /api/posts/:id`                           | title, description, email, salaryRange, address, company, stack,  |            | 400          | edit job post                |
-| PUT       | ` /api/posts/edit/:id`                      | changes         |               | 404          | add favorite junior                  |
+| PUT       | ` /api/posts/edit/:id`                      | changes         |  200           | 404          | add favorite junior                  |
 | POST      | ` /api/posts/`                              | title, description, email, salaryRange, address, company, stack | 201           |   400          | create a job post            |
 | DELETE    | ` /api/posts/delete/:id`                    | id              | 200           | 404          | removes favorite junior              |
 

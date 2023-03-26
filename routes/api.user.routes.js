@@ -5,10 +5,10 @@ const JobPost = require("../models/JobPost.model");
 router.get("/", async (req, res) => {
   try {
     const usersList = await User.find();
-    res.json(usersList);
+    res.status(200).json(usersList);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -23,10 +23,10 @@ router.get("/:id", async (req, res) => {
           model: "Company",
         },
       });
-    res.json(currentUser);
+    res.status(200).json(currentUser);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -47,10 +47,10 @@ router.put("/edit/:id", async (req, res) => {
     const currentUser = await User.findByIdAndUpdate(req.params.id, changes, {
       new: true,
     });
-    res.json(currentUser);
+    res.status(200).json(currentUser);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -63,12 +63,13 @@ router.get("/publicprofile/:id", async (req, res) => {
       location: currentUser.location,
       profilePic: currentUser.profilePic,
       skills: currentUser.skills,
-      calendly: typeof currentUser.calendly !== "undefined" ? currentUser.calendly : "",
+      calendly:
+        typeof currentUser.calendly !== "undefined" ? currentUser.calendly : "",
     };
-    res.json(responseUser);
+    res.status(200).json(responseUser);
   } catch (error) {
     console.log(error);
-    res.status(404).json({ message: error.message });
+    res.status(400).json({ message: error.message });
   }
 });
 
@@ -79,52 +80,105 @@ router.put("/edit/picture/:id", async (req, res) => {
         profilePic: req.body.profilePicture,
       },
     };
-    const currentUser = await User.findByIdAndUpdate(req.params.id, picture, { new: true });
+    const currentUser = await User.findByIdAndUpdate(req.params.id, picture, {
+      new: true,
+    });
     res.status(200).json(currentUser);
   } catch (error) {
     console.log("There was an error uploading a profile picture", error);
+    res.status(400).json({ message: error.message });
   }
 });
 
 router.put("/privateprofile/deleteFavJobPost", async (req, res) => {
   const { id, postId } = req.body;
-  const currentUser = await User.findByIdAndUpdate(id, { $pull: { favoriteJobPosts: { $eq: postId } } }, { new: true });
-  res.status(200).json(currentUser);
+  try {
+    const currentUser = await User.findByIdAndUpdate(
+      id,
+      { $pull: { favoriteJobPosts: { $eq: postId } } },
+      { new: true }
+    );
+    res.status(200).json(currentUser);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.put("/privateprofile/deleteSkill", async (req, res) => {
   const { id, skill } = req.body;
-  const currentUser = await User.findByIdAndUpdate(id, { $pull: { skills: { $eq: skill } } }, { new: true });
-  res.status(200).json(currentUser);
+  try {
+    const currentUser = await User.findByIdAndUpdate(
+      id,
+      { $pull: { skills: { $eq: skill } } },
+      { new: true }
+    );
+    res.status(200).json(currentUser);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.put("/privateprofile/deleteFavCompany", async (req, res) => {
   const { id, companyId } = req.body;
-  const currentUser = await User.findByIdAndUpdate(
-    id,
-    { $pull: { favoriteCompanies: { $eq: companyId } } },
-    { new: true }
-  );
-  res.status(200).json(currentUser);
+  try {
+    const currentUser = await User.findByIdAndUpdate(
+      id,
+      { $pull: { favoriteCompanies: { $eq: companyId } } },
+      { new: true }
+    );
+    res.status(200).json(currentUser);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.put("/addJobPost", async (req, res) => {
   const { id, postId } = req.body;
-  const findJobPost = await JobPost.findById(postId);
-  const currentUser = await User.findByIdAndUpdate(id, { $push: { favoriteJobPosts: findJobPost._id } }, { new: true });
-  res.status(200).json(currentUser);
+  try {
+    const findJobPost = await JobPost.findById(postId);
+    const currentUser = await User.findByIdAndUpdate(
+      id,
+      { $push: { favoriteJobPosts: findJobPost._id } },
+      { new: true }
+    );
+    res.status(200).json(currentUser);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.put("/addCompany", async (req, res) => {
   const { id, companyId } = req.body;
-  const currentUser = await User.findByIdAndUpdate(id, { $push: { favoriteCompanies: companyId } }, { new: true });
-  res.status(200).json(currentUser);
+  try {
+    const currentUser = await User.findByIdAndUpdate(
+      id,
+      { $push: { favoriteCompanies: companyId } },
+      { new: true }
+    );
+    res.status(200).json(currentUser);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 router.put("/addNewSkill", async (req, res) => {
   const { id, newSkill } = req.body;
-  const currentUser = await User.findByIdAndUpdate(id, { $push: { skills: newSkill } }, { new: true });
-  res.status(200).json(currentUser);
+  try {
+    const currentUser = await User.findByIdAndUpdate(
+      id,
+      { $push: { skills: newSkill } },
+      { new: true }
+    );
+    res.status(200).json(currentUser);
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
+  }
 });
 
 module.exports = router;

@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const currentJobPost = await JobPost.findById(req.params.id).populate("company");
-    res.json(currentJobPost);
+    res.status(200).json(currentJobPost);
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: error.message });
@@ -38,7 +38,7 @@ router.put("/:id", async (req, res) => {
   };
   try {
     const editJobPost = await JobPost.findByIdAndUpdate(req.params.id, editJobBody, { new: true });
-    res.json(editJobPost);
+    res.status(200).json(editJobPost);
   } catch (error) {
     console.log(error);
     res.status(400).json({ message: error.message });

@@ -7,7 +7,7 @@ const JobPost = require("../models/JobPost.model");
 router.get("/", async (req, res) => {
   try {
     const companyList = await Company.find();
-    res.json(companyList);
+    res.status(200).json(companyList);
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: error.message });
@@ -25,7 +25,7 @@ router.get("/:id", async (req, res) => {
           model: "Company",
         },
       });
-    res.json(currentCompany);
+    res.status(200).json(currentCompany);
   } catch (error) {
     console.log(error);
     res.status(404).json({ message: error.message });
@@ -80,23 +80,33 @@ router.put("/edit/picture/:id", async (req, res) => {
 
 router.put("/addFavoriteJunior", async (req, res) => {
   const { id, juniorId } = req.body;
-  const findJunior = await User.findById(juniorId);
-  const currentCompany = await Company.findByIdAndUpdate(
-    id,
-    { $push: { favorites: findJunior._id } },
-    { new: true }
-  );
-  res.status(200).json(currentCompany);
+  try {
+    const findJunior = await User.findById(juniorId);
+    const currentCompany = await Company.findByIdAndUpdate(
+      id,
+      { $push: { favorites: findJunior._id } },
+      { new: true }
+    );
+    res.status(200).json(currentCompany);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
+  }
 });
 
 router.put("/delete/favorite", async (req, res) => {
   const { id, favoriteId } = req.body;
-  const deleteFavorite = await Company.findByIdAndUpdate(
-    id,
-    { $pull: { favorites: { $eq: favoriteId } } },
-    { new: true }
-  );
-  res.status(200).json(deleteFavorite);
+  try {
+    const deleteFavorite = await Company.findByIdAndUpdate(
+      id,
+      { $pull: { favorites: { $eq: favoriteId } } },
+      { new: true }
+    );
+    res.status(200).json(deleteFavorite);
+  } catch (error) {
+    console.log(error);
+    res.status(404).json({ message: error.message });
+  }
 });
 
 module.exports = router;
